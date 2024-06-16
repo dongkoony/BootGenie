@@ -62,7 +62,7 @@ node {
 
     // Deploy Stack 단계: Docker Stack을 배포합니다.
     stage('Deploy Stack') {
-        sh "docker stack deploy --compose-file docker-compose.yaml your_stack_name"
+        sh "docker stack deploy --compose-file docker-compose.yaml jenkins_flask_app"
     }
     // CD 단계 종료
 }
