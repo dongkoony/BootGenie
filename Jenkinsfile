@@ -1,4 +1,5 @@
 node {
+    // CI 단계 시작
     // Checkout SCM 단계: 소스 코드를 SCM에서 체크아웃합니다.
     stage('Checkout SCM') {
         deleteDir() // 작업 디렉토리를 삭제하여 깨끗한 상태로 시작합니다.
@@ -46,4 +47,22 @@ node {
             }
         }
     }
+    // CI 단계 종료
+
+
+    // CD 단계 시작
+    // Docker Pull Images 단계: Docker 이미지를 풀링합니다.
+    stage('Docker Pull Images') {
+        withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+            sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+            sh "docker pull 110.15.58.113:8083/repository/app-test:latest" // 실제 백엔드 이미지 이름으로 변경
+            sh 'docker logout'
+        }
+    }
+
+    // Deploy Stack 단계: Docker Stack을 배포합니다.
+    stage('Deploy Stack') {
+        sh "docker stack deploy --compose-file docker-compose.yml your_stack_name"
+    }
+    // CD 단계 종료
 }

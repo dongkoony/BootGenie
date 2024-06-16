@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  app:
+    image: 110.15.58.113:8083/repository/app-test:latest
+    ports:
+      - "80:80"
